@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"./mailgun"
-	"./slack"
+	"gitlab.com/asmaloney/magsli/mailgun"
+	"gitlab.com/asmaloney/magsli/slack"
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
