@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"log/slog"
 	"net/http"
 	"os"
 )
@@ -53,7 +54,7 @@ func main() {
 	http.HandleFunc("/", handler)
 
 	printVersionInfo()
-	fmt.Printf("magsli listening on: %v\n", listenAddr)
+	slog.Info("listening on", "IP", listenAddr)
 
 	err := http.ListenAndServeTLS(listenAddr, serverSSLCertFile, serverSSLKeyFile, nil)
 
