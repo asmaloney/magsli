@@ -2,9 +2,13 @@
 
 Provides an endpoint for MailGun's webhooks which will format and send messages to a Slack webhook.
 
+## Mirror
+
+The [main repo is on GitLab](https://gitlab.com/asmaloney/magsli) and it is mirrored to other sites. [Issues](https://gitlab.com/asmaloney/magsli/-/issues) and [merge requests](https://gitlab.com/asmaloney/magsli/-/merge_requests) are accepted on GitLab.
+
 ## Use Case
 
-I host four containerized WordPress sites that each use MailGun for sending email. Occasionally I get a customer who cannot receive email this way (their systems reject it), but MailGun doesn't notify me that delivery failed. I wanted an alert so I can go look at the logs to see what's happening and contact the customer directly.
+I host multiple containerized WordPress sites that each use MailGun for sending email. Occasionally I get a customer who cannot receive email this way (their systems reject it), but MailGun doesn't notify me that delivery failed. I wanted an alert so I can go look at the logs to see what's happening and contact the customer directly.
 
 ## Design Goals
 
@@ -17,7 +21,9 @@ I wanted this to be:
 - small &amp; simple
 - designed for a docker container
 - low maintenance
-- self contained (no vendoring/external libraries)
+- self contained (limited vendoring/external libraries<sup>\*</sup>)
+
+(<sup>\*</sup> I chose not to use the full [mailgun-go](https://github.com/mailgun/mailgun-go) dependency because it pulls in a bunch of other dependencies. Instead I reference one of the internal packages and I duplicate a couple of structures and one function.)
 
 ## Building
 
@@ -78,26 +84,3 @@ I would suggest if you need customizability that you fork this repo and make you
 **I found a bug. Will you fix bugs?**
 
 Absolutely! Please [submit an issue](https://gitlab.com/asmaloney/magsli/-/issues) and we can work through it.
-
-**What's with the weird code to get the email subject from the MailGun POST?**
-
-The `message-headers` field from MailGun, while technically JSON, is in a bizarre developer-hostile format :-)
-
-It's an array of string arrays for key/value pairs like this:
-
-```
-[
-...
-  ["Subject", "Test bounces webhook"],
-  ["From", "Bob <bob@foo.com>"]
-...
-]
-```
-
-So it can't be marshalled easily as JSON to provide convenient indexing. I just use a very generic `[]interface{}` and index/cast to the correct thing.
-
-It's a bit of a hack. If there's a simple, more elegant way to do this, please submit an issue.
-
-**What's the license?**
-
-There is no license. Not everything needs to be owned by someone. Do whatever you want with it.
