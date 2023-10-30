@@ -51,7 +51,7 @@ func NewMessage(text string) Message {
 
 // AddData adds a new field to the "Data" Attachment.
 func (m *Message) AddData(title string, value string, isShort bool) {
-	m.addDataToAttachment(dataAttachmentName, title, value, isShort)
+	_, _ = m.addDataToAttachment(dataAttachmentName, title, value, isShort)
 }
 
 // AddError adds a new field to the "Errors" Attachment and changes the message emoji.
